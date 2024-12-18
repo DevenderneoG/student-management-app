@@ -5,18 +5,16 @@ const app = express();
 const corsOptions = {
   origin: "*",
   credentials: true,
-  optionSuccessStatus: 200.
-}
+  optionSuccessStatus: 200,
+};
 app.use(cors(corsOptions));
 
-
 const { initializeDatabase } = require("./db/db.connect");
-const Books = require("./models/students.model")
+const { Student } = require("./models/students.model");
 
 app.use(express.json());
 
 initializeDatabase();
-
 
 app.get("/", (req, res) => {
   res.send("Hello, Express!");
@@ -51,7 +49,7 @@ app.put("/students/:id", async (req, res) => {
     const updatedStudent = await Student.findByIdAndUpdate(
       studentId,
       updatedStudentData,
-      { new: true },
+      { new: true }
     );
 
     if (!updatedStudent) {
@@ -75,24 +73,17 @@ app.delete("/students/:id", async (req, res) => {
       return res.status(404).json({ error: "Student not found" });
     }
 
-    res
-      .status(200)
-      .json({
-        message: "Student deleted successfully",
-        student: deletedStudent,
-      });
+    res.status(200).json({
+      message: "Student deleted successfully",
+      student: deletedStudent,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-
-const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-  
-
-  
-
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
